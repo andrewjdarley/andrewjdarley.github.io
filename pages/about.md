@@ -1,7 +1,7 @@
 # About Me
 
 ## Education
-Bachelors in BYU's ACME (Applied Computational and Mathematical Emphasis) program wich an emphasis in Data Science.
+Bachelors in BYU's ACME (Applied Computational and Mathematical Emphasis) program wich an emphasis in Data Science. Expected Graduation: April 2027
 
 ## Work Experience
 
