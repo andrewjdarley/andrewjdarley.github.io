@@ -1,1 +1,537 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Site</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 165, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #ff8c00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+        }
+
+        .nav-links a.active {
+            background: #4169e1;
+            color: #ffffff;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 0;
+            color: #888;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #333;
+            border-top: 3px solid #4169e1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Markdown Content */
+        .markdown-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .markdown-content h1 {
+            color: #4169e1;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        .markdown-content h2 {
+            color: #5a7fc7;
+            margin: 2rem 0 1rem 0;
+            font-size: 2rem;
+        }
+
+        .markdown-content h3 {
+            color: #7b9bd1;
+            margin: 1.5rem 0 0.5rem 0;
+            font-size: 1.5rem;
+        }
+
+        .markdown-content p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .markdown-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            margin: 1rem 0;
+        }
+
+        .markdown-content pre {
+            background: #0f1419;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 4px solid #4169e1;
+        }
+
+        .markdown-content code {
+            background: #0f1419;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid #4169e1;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+            color: #ccc;
+        }
+
+        /* Post Grid for Projects and Blog */
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .post-card {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(65, 105, 225, 0.3);
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(65, 105, 225, 0.4);
+            border-color: #4169e1;
+        }
+
+        .post-card h3 {
+            color: #4169e1;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .post-card .excerpt {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .post-card .read-more {
+            color: #ff8c00;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .post-card .read-more:hover {
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+
+        .post-card .read-more::after {
+            content: '→';
+            transition: transform 0.3s ease;
+        }
+
+        .post-card .read-more:hover::after {
+            transform: translateX(5px);
+        }
+
+        /* Error State */
+        .error {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .markdown-content h1 {
+                font-size: 2rem;
+            }
+
+            .markdown-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .post-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-container {
+                padding: 0 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#home" data-page="home">Home</a></li>
+                <li><a href="#about" data-page="about">About</a></li>
+                <li><a href="#resume" data-page="resume">Resume</a></li>
+                <li><a href="#projects" data-page="projects">Projects</a></li>
+                <li><a href="#blog" data-page="blog">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="content">
+        <div class="loading">Loading...</div>
+    </main>
+
+    <script>
+        class GitHubPagesSite {
+            constructor() {
+                this.currentPage = 'home';
+                this.cache = new Map();
+                this.init();
+            }
+
+            init() {
+                this.setupNavigation();
+                this.setupMarkdown();
+                this.loadInitialPage();
+            }
+
+            setupNavigation() {
+                const navLinks = document.querySelectorAll('.nav-links a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const page = link.dataset.page;
+                        this.navigateToPage(page);
+                        this.updateActiveNav(link);
+                    });
+                });
+            }
+
+            setupMarkdown() {
+                // Configure marked to handle images with the /images/ prefix
+                const renderer = new marked.Renderer();
+                
+                renderer.image = (href, title, text) => {
+                    // If the image source doesn't start with http/https, prefix with /images/
+                    if (!href.startsWith('http') && !href.startsWith('/images/')) {
+                        href = `/images/${href}`;
+                    }
+                    
+                    return `<img src="${href}" alt="${text}" ${title ? `title="${title}"` : ''}>`;
+                };
+
+                marked.setOptions({
+                    renderer: renderer,
+                    highlight: function(code, lang) {
+                        return code;
+                    },
+                    breaks: true
+                });
+            }
+
+            updateActiveNav(activeLink) {
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                activeLink.classList.add('active');
+            }
+
+            loadInitialPage() {
+                // Check URL hash for initial page
+                const hash = window.location.hash.slice(1);
+                const page = hash || 'home';
+                
+                const navLink = document.querySelector(`[data-page="${page}"]`);
+                if (navLink) {
+                    this.navigateToPage(page);
+                    this.updateActiveNav(navLink);
+                } else {
+                    this.navigateToPage('home');
+                    this.updateActiveNav(document.querySelector('[data-page="home"]'));
+                }
+            }
+
+            async navigateToPage(page) {
+                this.currentPage = page;
+                window.location.hash = page;
+                
+                const content = document.getElementById('content');
+                content.innerHTML = '<div class="loading">Loading...</div>';
+
+                try {
+                    if (page === 'projects' || page === 'blog') {
+                        await this.loadPostListing(page);
+                    } else {
+                        await this.loadMarkdownPage(page);
+                    }
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    this.showError('Failed to load page content');
+                }
+            }
+
+            async loadMarkdownPage(page) {
+                try {
+                    const content = await this.fetchMarkdown(`pages/${page}.md`);
+                    const html = marked.parse(content);
+                    
+                    document.getElementById('content').innerHTML = `
+                        <div class="markdown-content">
+                            ${html}
+                        </div>
+                    `;
+                } catch (error) {
+                    this.showError(`Could not load ${page}.md`);
+                }
+            }
+
+            async loadPostListing(type) {
+                try {
+                    // In a real GitHub Pages setup, you'd need to maintain an index file
+                    // For now, we'll create a mock function that would work with your structure
+                    const posts = await this.getPostList(type);
+                    
+                    let html = `
+                        <div class="markdown-content">
+                            <h1>${type.charAt(0).toUpperCase() + type.slice(1)}</h1>
+                            <div class="post-grid">
+                    `;
+
+                    for (const post of posts) {
+                        const postData = await this.getPostPreview(type, post);
+                        html += `
+                            <div class="post-card" onclick="window.site.loadPost('${type}', '${post}')">
+                                <h3>${postData.title}</h3>
+                                <div class="excerpt">${postData.excerpt}</div>
+                                <a href="#" class="read-more">Read More</a>
+                            </div>
+                        `;
+                    }
+
+                    html += `
+                            </div>
+                        </div>
+                    `;
+
+                    document.getElementById('content').innerHTML = html;
+                } catch (error) {
+                    this.showError(`Could not load ${type} posts`);
+                }
+            }
+
+            async getPostList(type) {
+                // This is a mock function. In a real setup, you'd need to maintain
+                // an index file (like posts.json) or use GitHub API
+                // For demonstration, returning some sample posts
+                if (type === 'projects') {
+                    return ['my-first-project', 'web-scraper', 'mobile-app'];
+                } else if (type === 'blog') {
+                    return ['getting-started', 'tips-and-tricks', 'advanced-techniques'];
+                }
+                return [];
+            }
+
+            async getPostPreview(type, filename) {
+                try {
+                    const content = await this.fetchMarkdown(`pages/${type}/${filename}.md`);
+                    const lines = content.split('\n');
+                    
+                    // Extract title (first heading or filename)
+                    let title = filename.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    const titleMatch = content.match(/^#\s+(.+)/m);
+                    if (titleMatch) {
+                        title = titleMatch[1];
+                    }
+
+                    // Create excerpt (first 150 characters of content, excluding title)
+                    const contentWithoutTitle = content.replace(/^#\s+.+/m, '').trim();
+                    const plainText = contentWithoutTitle.replace(/[#*`_\[\]]/g, '');
+                    const excerpt = plainText.substring(0, 150) + (plainText.length > 150 ? '...' : '');
+
+                    return { title, excerpt };
+                } catch (error) {
+                    return {
+                        title: filename.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                        excerpt: 'Preview not available'
+                    };
+                }
+            }
+
+            async loadPost(type, filename) {
+                try {
+                    const content = await this.fetchMarkdown(`pages/${type}/${filename}.md`);
+                    const html = marked.parse(content);
+                    
+                    document.getElementById('content').innerHTML = `
+                        <div class="markdown-content">
+                            <a href="#${type}" style="color: #4169e1; text-decoration: none; margin-bottom: 1rem; display: inline-block;">
+                                ← Back to ${type}
+                            </a>
+                            ${html}
+                        </div>
+                    `;
+                } catch (error) {
+                    this.showError(`Could not load ${filename}.md`);
+                }
+            }
+
+            async fetchMarkdown(path) {
+                if (this.cache.has(path)) {
+                    return this.cache.get(path);
+                }
+
+                const response = await fetch(path);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const content = await response.text();
+                this.cache.set(path, content);
+                return content;
+            }
+
+            showError(message) {
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        <h2>Oops!</h2>
+                        <p>${message}</p>
+                        <p>Please check that the file exists and try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize the site
+        window.site = new GitHubPagesSite();
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', () => {
+            window.site.loadInitialPage();
+        });
+    </script>
+</body>
+</html>
