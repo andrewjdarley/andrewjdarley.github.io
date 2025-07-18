@@ -47,36 +47,29 @@
             justify-content: center;
         }
 
+        .nav-links li {
+            min-width: 120px;
+            text-align: center;
+        }
+
         .nav-links a {
             color: #ffffff;
             text-decoration: none;
             font-weight: 500;
-            padding: 0.5rem 1rem;
+            font-size: 1.1rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 6px;
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+            cursor: pointer;
+            display: inline-block;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 165, 0, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .nav-links a:hover::before {
-            left: 100%;
+            box-sizing: border-box;
         }
 
         .nav-links a:hover {
             color: #ff8c00;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+            letter-spacing: 0.08em;
         }
 
         .nav-links a.active {
@@ -214,7 +207,7 @@
         }
 
         .post-card .read-more {
-            color: #ff8c00;
+            color: #aaa;
             font-weight: 500;
             text-decoration: none;
             display: inline-flex;
@@ -224,7 +217,7 @@
         }
 
         .post-card .read-more:hover {
-            color: #ffffff;
+            color: #cccccc;
             transform: translateX(5px);
         }
 
@@ -247,6 +240,20 @@
             margin: 2rem 0;
         }
 
+        /* Back button */
+        .back-link {
+            color: #4169e1;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #5a7fc7;
+            transform: translateX(-5px);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-links {
@@ -254,8 +261,8 @@
             }
 
             .nav-links a {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+                font-size: 1rem;
             }
 
             main {
@@ -332,11 +339,9 @@
             }
 
             setupMarkdown() {
-                // Configure marked to handle images with the /images/ prefix
                 const renderer = new marked.Renderer();
                 
                 renderer.image = (href, title, text) => {
-                    // If the image source doesn't start with http/https, prefix with /images/
                     if (!href.startsWith('http') && !href.startsWith('/images/')) {
                         href = `/images/${href}`;
                     }
@@ -361,18 +366,44 @@
             }
 
             loadInitialPage() {
-                // Check URL hash for initial page
-                const hash = window.location.hash.slice(1);
-                const page = hash || 'home';
+                // Parse the hash for route information
+                const route = this.parseRoute();
                 
-                const navLink = document.querySelector(`[data-page="${page}"]`);
-                if (navLink) {
-                    this.navigateToPage(page);
-                    this.updateActiveNav(navLink);
+                if (route.type === 'post') {
+                    // Load individual post
+                    this.loadPost(route.category, route.slug);
+                    const navLink = document.querySelector(`[data-page="${route.category}"]`);
+                    if (navLink) this.updateActiveNav(navLink);
                 } else {
-                    this.navigateToPage('home');
-                    this.updateActiveNav(document.querySelector('[data-page="home"]'));
+                    // Load regular page
+                    const page = route.page || 'home';
+                    this.navigateToPage(page);
+                    const navLink = document.querySelector(`[data-page="${page}"]`);
+                    if (navLink) {
+                        this.updateActiveNav(navLink);
+                    } else {
+                        this.updateActiveNav(document.querySelector('[data-page="home"]'));
+                    }
                 }
+            }
+
+            parseRoute() {
+                const hash = window.location.hash.slice(1);
+                
+                if (!hash) return { page: 'home' };
+                
+                // Check if it's a post route (blog/post-slug or projects/project-slug)
+                const parts = hash.split('/');
+                if (parts.length === 2 && (parts[0] === 'blog' || parts[0] === 'projects')) {
+                    return {
+                        type: 'post',
+                        category: parts[0],
+                        slug: parts[1]
+                    };
+                }
+                
+                // Regular page route
+                return { page: hash };
             }
 
             async navigateToPage(page) {
@@ -411,8 +442,6 @@
 
             async loadPostListing(type) {
                 try {
-                    // In a real GitHub Pages setup, you'd need to maintain an index file
-                    // For now, we'll create a mock function that would work with your structure
                     const posts = await this.getPostList(type);
                     
                     let html = `
@@ -424,10 +453,10 @@
                     for (const post of posts) {
                         const postData = await this.getPostPreview(type, post);
                         html += `
-                            <div class="post-card" onclick="window.site.loadPost('${type}', '${post}')">
+                            <div class="post-card" onclick="window.site.navigateToPost('${type}', '${post}')">
                                 <h3>${postData.title}</h3>
                                 <div class="excerpt">${postData.excerpt}</div>
-                                <a href="#" class="read-more">Read More</a>
+                                <a href="#${type}/${post}" class="read-more">Read More</a>
                             </div>
                         `;
                     }
@@ -443,10 +472,15 @@
                 }
             }
 
+            navigateToPost(type, slug) {
+                // Update URL first
+                window.location.hash = `${type}/${slug}`;
+                // Then load the post
+                this.loadPost(type, slug);
+            }
+
             async getPostList(type) {
-                // This is a mock function. In a real setup, you'd need to maintain
-                // an index file (like posts.json) or use GitHub API
-                // For demonstration, returning some sample posts
+                // Mock function - in real implementation, you'd have an index file
                 if (type === 'projects') {
                     return ['my-first-project', 'web-scraper', 'mobile-app'];
                 } else if (type === 'blog') {
@@ -458,16 +492,13 @@
             async getPostPreview(type, filename) {
                 try {
                     const content = await this.fetchMarkdown(`pages/${type}/${filename}.md`);
-                    const lines = content.split('\n');
                     
-                    // Extract title (first heading or filename)
                     let title = filename.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                     const titleMatch = content.match(/^#\s+(.+)/m);
                     if (titleMatch) {
                         title = titleMatch[1];
                     }
 
-                    // Create excerpt (first 150 characters of content, excluding title)
                     const contentWithoutTitle = content.replace(/^#\s+.+/m, '').trim();
                     const plainText = contentWithoutTitle.replace(/[#*`_\[\]]/g, '');
                     const excerpt = plainText.substring(0, 150) + (plainText.length > 150 ? '...' : '');
@@ -488,9 +519,7 @@
                     
                     document.getElementById('content').innerHTML = `
                         <div class="markdown-content">
-                            <a href="#${type}" style="color: #4169e1; text-decoration: none; margin-bottom: 1rem; display: inline-block;">
-                                ← Back to ${type}
-                            </a>
+                            <a href="#${type}" class="back-link">← Back to ${type}</a>
                             ${html}
                         </div>
                     `;
