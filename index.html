@@ -77,6 +77,23 @@
             color: #ffffff;
         }
 
+        /* Markdown Content - Custom Link Style */
+        .markdown-content a {
+            color: #b3e5fc;
+            text-decoration: none;
+            border-bottom: 1px dashed #b3e5fc;
+            transition: color 0.2s, border-bottom-color 0.2s, background 0.2s;
+            padding: 0 2px;
+        }
+
+        .markdown-content a:hover,
+        .markdown-content a:focus {
+            color: #ff8c00;
+            border-bottom: 1px solid #ff8c00;
+            background: rgba(255, 140, 0, 0.08);
+            outline: none;
+        }
+
         /* Main Content */
         main {
             max-width: 1200px;
@@ -128,7 +145,7 @@
         }
 
         .markdown-content h3 {
-            color: #7b9bd1;
+            color: #b3d1ff; /* Lighter blue for more pop */
             margin: 1.5rem 0 0.5rem 0;
             font-size: 1.5rem;
         }
@@ -173,15 +190,15 @@
         /* Post Grid for Projects and Blog */
         .post-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* was 300px */
+            gap: 1.2rem; /* was 2rem */
             margin-top: 2rem;
         }
 
         .post-card {
             background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 0.8rem; /* was 1.5rem */
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
             cursor: pointer;
@@ -196,14 +213,37 @@
 
         .post-card h3 {
             color: #4169e1;
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
+            margin-bottom: 0.6rem; /* was 1rem */
+            font-size: 1.1rem; /* was 1.4rem */
         }
 
         .post-card .excerpt {
             color: #ccc;
-            line-height: 1.6;
-            margin-bottom: 1rem;
+            line-height: 1.5;
+            margin-bottom: 0.7rem; /* was 1rem */
+            font-size: 0.98rem;
+        }
+
+        .post-card .meta {
+            color: #888;
+            font-size: 0.8rem; /* was 0.9rem */
+            margin-bottom: 0.7rem; /* was 1rem */
+        }
+
+        .post-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem; /* was 0.5rem */
+            margin-bottom: 0.7rem; /* was 1rem */
+        }
+
+        .post-card .tag {
+            background: rgba(65, 105, 225, 0.2);
+            color: #b3d1ff;
+            padding: 0.12rem 0.4rem; /* was 0.2rem 0.6rem */
+            border-radius: 12px;
+            font-size: 0.7rem; /* was 0.8rem */
+            border: 1px solid rgba(65, 105, 225, 0.3);
         }
 
         .post-card .read-more {
@@ -302,8 +342,7 @@
                 <li><a href="#home" data-page="home">Home</a></li>
                 <li><a href="#about" data-page="about">About</a></li>
                 <li><a href="#resume" data-page="resume">Resume</a></li>
-                <li><a href="#projects" data-page="projects">Projects</a></li>
-                <li><a href="#blog" data-page="blog">Blog</a></li>
+                <li><a href="#portfolio" data-page="portfolio">Portfolio</a></li>
             </ul>
         </div>
     </nav>
@@ -317,6 +356,7 @@
             constructor() {
                 this.currentPage = 'home';
                 this.cache = new Map();
+                this.portfolioIndex = null;
                 this.init();
             }
 
@@ -392,9 +432,9 @@
                 
                 if (!hash) return { page: 'home' };
                 
-                // Check if it's a post route (blog/post-slug or projects/project-slug)
+                // Check if it's a post route (portfolio/post-slug)
                 const parts = hash.split('/');
-                if (parts.length === 2 && (parts[0] === 'blog' || parts[0] === 'projects')) {
+                if (parts.length === 2 && parts[0] === 'portfolio') {
                     return {
                         type: 'post',
                         category: parts[0],
@@ -414,8 +454,8 @@
                 content.innerHTML = '<div class="loading">Loading...</div>';
 
                 try {
-                    if (page === 'projects' || page === 'blog') {
-                        await this.loadPostListing(page);
+                    if (page === 'portfolio') {
+                        await this.loadPortfolioListing();
                     } else {
                         await this.loadMarkdownPage(page);
                     }
@@ -440,35 +480,99 @@
                 }
             }
 
-            async loadPostListing(type) {
+            async loadPortfolioIndex() {
+                if (this.portfolioIndex) {
+                    return this.portfolioIndex;
+                }
+
                 try {
-                    const posts = await this.getPostList(type);
+                    const response = await fetch('pages/portfolio/index.json');
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    this.portfolioIndex = await response.json();
+                    return this.portfolioIndex;
+                } catch (error) {
+                    console.error('Failed to load portfolio index:', error);
+                    // Fallback to empty array if index.json doesn't exist
+                    this.portfolioIndex = [];
+                    return this.portfolioIndex;
+                }
+            }
+
+            async loadPortfolioListing() {
+                try {
+                    const portfolioItems = await this.loadPortfolioIndex();
                     
                     let html = `
                         <div class="markdown-content">
-                            <h1>${type.charAt(0).toUpperCase() + type.slice(1)}</h1>
-                            <div class="post-grid">
+                            <h1>Portfolio</h1>
                     `;
 
-                    for (const post of posts) {
-                        const postData = await this.getPostPreview(type, post);
+                    if (portfolioItems.length === 0) {
                         html += `
-                            <div class="post-card" onclick="window.site.navigateToPost('${type}', '${post}')">
-                                <h3>${postData.title}</h3>
-                                <div class="excerpt">${postData.excerpt}</div>
-                                <a href="#${type}/${post}" class="read-more">Read More</a>
-                            </div>
+                            <p>No portfolio items found. Create an <code>index.json</code> file in your <code>pages/portfolio/</code> directory to list your projects.</p>
+                            <h3>Example index.json structure:</h3>
+                            <pre><code>[
+  {
+    "slug": "my-awesome-project",
+    "title": "My Awesome Project",
+    "description": "A brief description of the project",
+    "tags": ["React", "Node.js", "MongoDB"],
+    "date": "2024-01-15",
+    "featured": true
+  }
+]</code></pre>
                         `;
+                    } else {
+                        // Sort by featured first, then by date (newest first)
+                        const sortedItems = portfolioItems.sort((a, b) => {
+                            if (a.featured && !b.featured) return -1;
+                            if (!a.featured && b.featured) return 1;
+                            return new Date(b.date || '1970-01-01') - new Date(a.date || '1970-01-01');
+                        });
+
+                        html += '<div class="post-grid">';
+
+                        for (const item of sortedItems) {
+                            const tagsHtml = item.tags ? item.tags.map(tag => 
+                                `<span class="tag">${tag}</span>`
+                            ).join('') : '';
+
+                            // Fix: Display date in MDT (America/Denver)
+                            let dateHtml = '';
+                            if (item.date) {
+                                const dateParts = item.date.split('-').map(Number);
+                                // month is 0-based in JS Date
+                                let dateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                                // Use toLocaleDateString with America/Denver timezone
+                                dateHtml = dateObj.toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    timeZone: 'America/Denver'
+                                });
+                            }
+
+                            html += `
+                                <div class="post-card" onclick="window.site.navigateToPost('portfolio', '${item.slug}')">
+                                    <h3>${item.title || item.slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h3>
+                                    ${dateHtml ? `<div class="meta">${dateHtml}</div>` : ''}
+                                    <div class="excerpt">${item.description || 'No description available'}</div>
+                                    ${tagsHtml ? `<div class="tags">${tagsHtml}</div>` : ''}
+                                    <a href="#portfolio/${item.slug}" class="read-more">View Project</a>
+                                </div>
+                            `;
+                        }
+
+                        html += '</div>';
                     }
 
-                    html += `
-                            </div>
-                        </div>
-                    `;
-
+                    html += '</div>';
                     document.getElementById('content').innerHTML = html;
                 } catch (error) {
-                    this.showError(`Could not load ${type} posts`);
+                    this.showError('Could not load portfolio items');
                 }
             }
 
@@ -479,39 +583,6 @@
                 this.loadPost(type, slug);
             }
 
-            async getPostList(type) {
-                // Mock function - in real implementation, you'd have an index file
-                if (type === 'projects') {
-                    return ['my-first-project', 'web-scraper', 'mobile-app'];
-                } else if (type === 'blog') {
-                    return ['getting-started', 'tips-and-tricks', 'advanced-techniques'];
-                }
-                return [];
-            }
-
-            async getPostPreview(type, filename) {
-                try {
-                    const content = await this.fetchMarkdown(`pages/${type}/${filename}.md`);
-                    
-                    let title = filename.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    const titleMatch = content.match(/^#\s+(.+)/m);
-                    if (titleMatch) {
-                        title = titleMatch[1];
-                    }
-
-                    const contentWithoutTitle = content.replace(/^#\s+.+/m, '').trim();
-                    const plainText = contentWithoutTitle.replace(/[#*`_\[\]]/g, '');
-                    const excerpt = plainText.substring(0, 150) + (plainText.length > 150 ? '...' : '');
-
-                    return { title, excerpt };
-                } catch (error) {
-                    return {
-                        title: filename.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-                        excerpt: 'Preview not available'
-                    };
-                }
-            }
-
             async loadPost(type, filename) {
                 try {
                     const content = await this.fetchMarkdown(`pages/${type}/${filename}.md`);
@@ -519,7 +590,6 @@
                     
                     document.getElementById('content').innerHTML = `
                         <div class="markdown-content">
-                            <a href="#${type}" class="back-link">← Back to ${type}</a>
                             ${html}
                         </div>
                     `;

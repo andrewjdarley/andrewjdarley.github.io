@@ -38,7 +38,7 @@ My lab just wrapped up our Kaggle competition: [BYU Locating Bacterial Flagellar
 ## Interests
 
 ### Hobbies
-Miniature Painting,
+Miniature Painting
 Weight Lifting 
 Biking 
 Video Games
@@ -72,5 +72,5 @@ Board Games
 <a href="https://www.goodreads.com/book/show/375802.Ender_s_Game" style="color: #b3e5fc;">Ender's Game</a>
 <a href="https://www.gocomics.com/calvinandhobbes" style="color: #b3e5fc;">Calvin and Hobbes</a>
 
-## Podcasts
+### Podcasts
 <a href="https://www.dancarlin.com/hardcore-history-series/" style="color: #b3e5fc;">Dan Carlin's Hardcore History</a>
