@@ -24,4 +24,12 @@ From left to right, we have Wolf, Palutena, then Byleth
   <img src="/images/byleth_chart.jpg" alt="Byleth Character Analysis Chart" style="min-width: 200px; flex: 1 1 0; max-width: 100%; height: auto;" />
 </div>
 
-While this is a professional player's matchup chart and should be expected to differ from my amateur performance, it shows  
+While these are higher level matchup charts and should be expected to differ from my amateur experience, we can see some of the trends that I experienced in my gameplay. For instance, Steve is listed as a difficult matchup for all three of them while Mr. Game and Watch is marked as one of Byleth's relative easier matchups. 
+
+My hypothesis was simple: analyzing these matchup charts as data points for each character would yield natural clustering. This clustering could help determine which characters are too similar to each other in critical matchups and which cover each other's weaknesses.
+
+First I would need data. This posed some problems. 
+
+There is no standard format for these mathchup charts. Everyone labels their tiers differently. I decided that in order to simplify I would parse each matchup into a numerical format where favorable matchups would be positive numbers and unfavorable ones would be negative numbers. 
+
+Initially, I went straight to manual annotation purgatory and began digitizing the information found on <a href="https://www.reddit.com/r/smashbros/comments/1j0o2r5/ultimate_matchup_chart_compilation_v13/">This reddit post</a>. That was a mistake. I had to deal with every pro's different labeling scheme, not to mention that some of the links on the list no longer functioned. So I set out to see if my work had already been done for me. 
