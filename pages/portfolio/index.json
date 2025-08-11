@@ -1,16 +1,8 @@
 
 [
     {
-      "slug": "test",
-      "title": "Test",
-      "description": "This is a test",
-      "tags": [],
-      "date": "2024-01-1",
-      "featured": true
-    },
-    {
         "slug": "smash-bros-pca",
-        "title": "Unsupervised Categorization of Smash Bros Characters",
+        "title": "Unsupervised Categorization of Smash Ultimate Characters via Matchup Data",
         "description": "Analyzing community-provided matchup tier list data to identify playstyle patterns",
         "tags": ["PCA", "Clustering", "Unsupervised Learning"],
         "date": "2024-07-20",

@@ -13,7 +13,6 @@ I'm an aspiring Data Scientist on my third year studying Applied Mathematics at 
 
 ## What I've been doing
 
-<a href="/#projects" style="color: #b3e5fc; font-size: 1.15em;">View My Latest Project →</a>
-<a href="/#blog" style="color: #b3e5fc; font-size: 1.15em;">Read My Weird Thoughts →</a>
+<a href="/#portfolio" style="color: #b3e5fc; font-size: 1.15em;">View My Latest Projects →</a>
 <a href="/#about" style="color: #b3e5fc; font-size: 1.15em;">Learn More About Me →</a>
 <a href="/#resume" style="color: #b3e5fc; font-size: 1.15em;">See My Experience →</a>
