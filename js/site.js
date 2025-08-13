@@ -69,18 +69,19 @@ class GitHubPagesSite {
     }
 
     loadInitialPage() {
-        // Parse the hash for route information
+        // Parse the current path for route information
         const route = this.parseRoute();
         
         if (route.type === 'post') {
             // Load individual post
+            this.updatePostMeta(route.category, route.slug);
             this.loadPost(route.category, route.slug);
             const navLink = document.querySelector(`[data-page="${route.category}"]`);
             if (navLink) this.updateActiveNav(navLink);
         } else {
             // Load regular page
             const page = route.page || 'home';
-            this.navigateToPage(page);
+            this.navigateToPage(page, false); // Don't update URL since we're loading initial page
             const navLink = document.querySelector(`[data-page="${page}"]`);
             if (navLink) {
                 this.updateActiveNav(navLink);
@@ -91,27 +92,37 @@ class GitHubPagesSite {
     }
 
     parseRoute() {
-        const hash = window.location.hash.slice(1);
+        const path = window.location.pathname;
+        const pathSegments = path.split('/').filter(segment => segment.length > 0);
         
-        if (!hash) return { page: 'home' };
+        // Handle root path
+        if (pathSegments.length === 0 || (pathSegments.length === 1 && pathSegments[0] === '')) {
+            return { page: 'home' };
+        }
         
         // Check if it's a post route (portfolio/post-slug)
-        const parts = hash.split('/');
-        if (parts.length === 2 && parts[0] === 'portfolio') {
+        if (pathSegments.length === 2 && pathSegments[0] === 'portfolio') {
             return {
                 type: 'post',
-                category: parts[0],
-                slug: parts[1]
+                category: pathSegments[0],
+                slug: pathSegments[1]
             };
         }
         
         // Regular page route
-        return { page: hash };
+        return { page: pathSegments[0] };
     }
 
-    async navigateToPage(page) {
+    async navigateToPage(page, updateHistory = true) {
         this.currentPage = page;
-        window.location.hash = page;
+        
+        if (updateHistory) {
+            const url = page === 'home' ? '/' : `/${page}`;
+            window.history.pushState({ page }, '', url);
+        }
+        
+        // Update page title and meta tags
+        this.updatePageMeta(page);
         
         const content = document.getElementById('content');
         content.innerHTML = '<div class="loading">Loading...</div>';
@@ -128,9 +139,46 @@ class GitHubPagesSite {
         }
     }
 
+    updatePageMeta(page) {
+        const titles = {
+            'home': 'Andrew Darley - Portfolio',
+            'about': 'About - Andrew Darley',
+            'resume': 'Resume - Andrew Darley',
+            'portfolio': 'Portfolio - Andrew Darley'
+        };
+        
+        const descriptions = {
+            'home': 'Andrew Darley\'s personal portfolio showcasing data science projects, including machine learning and statistical analysis work.',
+            'about': 'Learn more about Andrew Darley, his background, and expertise in data science and machine learning.',
+            'resume': 'Andrew Darley\'s professional resume and work experience in data science and analytics.',
+            'portfolio': 'Explore Andrew Darley\'s portfolio of data science projects, machine learning models, and statistical analyses.'
+        };
+        
+        document.title = titles[page] || titles['home'];
+        
+        // Update meta description
+        let metaDescription = document.querySelector('meta[name="description"]');
+        if (!metaDescription) {
+            metaDescription = document.createElement('meta');
+            metaDescription.name = 'description';
+            document.head.appendChild(metaDescription);
+        }
+        metaDescription.content = descriptions[page] || descriptions['home'];
+        
+        // Update canonical URL
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+            canonical = document.createElement('link');
+            canonical.rel = 'canonical';
+            document.head.appendChild(canonical);
+        }
+        const baseUrl = 'https://andrewjdarley.github.io';
+        canonical.href = page === 'home' ? baseUrl : `${baseUrl}/${page}`;
+    }
+
     async loadMarkdownPage(page) {
         try {
-            const content = await this.fetchMarkdown(`pages/${page}.md`);
+            const content = await this.fetchMarkdown(`/pages/${page}.md`);
             const html = marked.parse(content);
             
             document.getElementById('content').innerHTML = `
@@ -149,7 +197,7 @@ class GitHubPagesSite {
         }
 
         try {
-            const response = await fetch('pages/portfolio/index.json');
+            const response = await fetch('/pages/portfolio/index.json');
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
@@ -309,15 +357,48 @@ class GitHubPagesSite {
     }
 
     navigateToPost(type, slug) {
-        // Update URL first
-        window.location.hash = `${type}/${slug}`;
+        // Update URL with clean path
+        const url = `/${type}/${slug}`;
+        window.history.pushState({ type, slug }, '', url);
+        
+        // Update page title and meta tags for the post
+        this.updatePostMeta(type, slug);
+        
         // Then load the post
         this.loadPost(type, slug);
     }
 
+    updatePostMeta(type, slug) {
+        // For now, use a generic title and description
+        // In a more advanced implementation, you could fetch the post metadata
+        // from the markdown frontmatter or a separate metadata file
+        const title = `${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} - Andrew Darley`;
+        const description = `View Andrew Darley's project: ${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
+        
+        document.title = title;
+        
+        // Update meta description
+        let metaDescription = document.querySelector('meta[name="description"]');
+        if (!metaDescription) {
+            metaDescription = document.createElement('meta');
+            metaDescription.name = 'description';
+            document.head.appendChild(metaDescription);
+        }
+        metaDescription.content = description;
+        
+        // Update canonical URL
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+            canonical = document.createElement('link');
+            canonical.rel = 'canonical';
+            document.head.appendChild(canonical);
+        }
+        canonical.href = `https://andrewjdarley.github.io/${type}/${slug}`;
+    }
+
     async loadPost(type, filename) {
         try {
-            const content = await this.fetchMarkdown(`pages/${type}/${filename}.md`);
+            const content = await this.fetchMarkdown(`/pages/${type}/${filename}.md`);
             const html = marked.parse(content);
             
             document.getElementById('content').innerHTML = `
@@ -360,6 +441,6 @@ class GitHubPagesSite {
 window.site = new GitHubPagesSite();
 
 // Handle browser back/forward buttons
-window.addEventListener('popstate', () => {
+window.addEventListener('popstate', (event) => {
     window.site.loadInitialPage();
 });
