@@ -5,7 +5,16 @@
         "title": "Unsupervised Categorization of Smash Ultimate Characters via Matchup Data",
         "description": "Analyzing community-provided matchup tier list data to identify playstyle patterns",
         "tags": ["PCA", "Clustering", "Unsupervised Learning"],
-        "date": "2024-07-20",
+        "date": "2024-08-12",
+        "featured": false
+    },
+    {
+        "slug": "cta-auto-card",
+        "title": "Call to Adventure Challenge Generator",
+        "description": "ML system that predicts difficulty, stats, and rewards for existing challenge concepts using KNN on sentence embeddings to find similar challenges",
+        "tags": ["KNN", "Embeddings", "NLP"],
+        "date": "2024-08-13",
         "featured": true
     }
-]
+
+]                           

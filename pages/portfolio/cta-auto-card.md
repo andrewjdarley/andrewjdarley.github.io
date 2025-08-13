@@ -1,0 +1,22 @@
+## Call to Adventure Challenge Generator
+
+<img src="/images/ctabox.jpeg" alt="Nonsense" style="max-width: 100%; height: auto;">
+
+I am a huge fan of board games. I find few pastimes more fulfilling than allowing a simulated world to completely engross me by applying my mind to creative fictitious tasks. Generally, I think that games can appeal to me in one of three ways: elegant simplicity in games such as <a href="https://en.wikipedia.org/wiki/Chess">Chess</a> or <a href="https://boardgamegeek.com/boardgame/131357/coup">Coup</a>, complex and strategic rulesets in games such as <a href="https://boardgamegeek.com/boardgame/167791/terraforming-mars">Terraforming Mars</a> or <a href="https://magic.wizards.com/en/formats/booster-draft">MTG drafting</a>, or by playing to my preferences and interests. 
+
+It's kind of crazy that an otherwise unremarkable game can be so appealing to me just by wrapping it up in something I like. I remember when I discovered there was <a href="https://boardgamegeek.com/boardgame/182626/mistborn-house-war">a Mistborn-themed Board Game</a>—I purchased the game the same day after skimming through the rulebook a single time. And while I do enjoy playing the game, I know that my main reason for doing so is because I'm a Brandon Sanderson fan. 
+
+<a href="https://boardgamegeek.com/boardgame/238992/call-to-adventure">Call to Adventure</a> appeals to my D&D and fantasy storytelling interests. That's why I bought it for my brother as a birthday present. But oh my, I have sunk more hours into Call to Adventure than I have literally any other board game, TV show, or video game. And that's not because of the appeal of its gameplay or its D&D appeal, rather its endless adaptability to the imaginations of my brothers and I.
+
+<img src="/images/ctaboard.jpg">
+
+A game of Call to Adventure begins with each player choosing an origin card and a motivation card (Squire and Sole Survivor in the example above) which grant some starting stats and abilities. Additionally, the players choose a hidden destiny card which will provide additional points at the end of the game based on the actions they took and the results thereof (Force of Darkness in this case). These act as the starting point for each character and encourage what actions you will benefit from taking in the game. 
+
+For example, the above player started with the Squire origin which provides a Strength (the orange sword) and a Dexterity (the gray arrow) as base stats and provides benefits for attempting challenges using those stats. This would encourage your character to attempt strength-based challenges such as slaying a dragon or battling in an army, or dexterity-based challenges such as stealing treasure from a dragon or rescue missions. 
+
+<img src="/images/tablecta.jpg">
+
+Without delving too much into the specifics, the game proceeds from this point in three acts representing things that can happen at various stages of a character's story. Each turn you can collect a trait card such as "Adventurous" or "Honorable" or attempt a challenge such as "Lost in the Woods" or "Magical Test". Additionally, when attempting a challenge, you have the option to choose one of two paths which grant different rewards for completing them. For example, the "Guard Duty" challenge located second from the left on the top row provides you two options. Either you can watch over the city, granting your character increased wisdom and a royal story point, or you can attempt the more difficult path of catching a criminal which grants increased dexterity and a justice story point as well as a point for your triumph. Like I said, I don't want to focus too much on the specifics of what these mean, rather I just want to give a basic understanding of how challenges work so you can understand the motivation for my project. 
+
+Initially, my brothers and I enjoyed playing the game according to the written rules, competing for points using the system designed in the rules. We also played into the storytelling aspect that this game aims to create by telling the stories that emerged through this gameplay. We played this way for a long time until eventually one of our games inspired a short D&D campaign where the events of our game of Call to Adventure were the lore of the world we played in. After that we began creating D&D characters based on the stories we made in the game and battled them against each other, coming up with a ruleset for converting your story into a character. 
+
