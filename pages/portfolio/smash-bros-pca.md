@@ -33,3 +33,77 @@ First I would need data. This posed some problems.
 There is no standard format for these mathchup charts. Everyone labels their tiers differently. I decided that in order to simplify I would parse each matchup into a numerical format where favorable matchups would be positive numbers and unfavorable ones would be negative numbers. 
 
 Initially, I went straight to manual annotation purgatory and began digitizing the information found on <a href="https://www.reddit.com/r/smashbros/comments/1j0o2r5/ultimate_matchup_chart_compilation_v13/">This reddit post</a>. That was a mistake. I had to deal with every pro's different labeling scheme, not to mention that some of the links on the list no longer functioned. So I set out to see if my work had already been done for me. 
+
+After some research I found <a href="https://www.reddit.com/r/smashbros/comments/1dns7t0/smash_ultimate_full_matchup_chart/">This dataset</a> generated using community-voted matchup information. While this is not the most accurate source, it certainly provides enough data for this experiment. 
+
+To start, I did a <a href="https://www.ibm.com/think/topics/principal-component-analysis">PCA</a> on the matchup data in order to visualize what we were working with. 
+
+<img src="/images/pca_characters.png">
+
+Immediately I see the red flag that a whopping 65.7% of the variance is explained along a single axis. That is far far too high for the problem we're facing. Our data should be much noisier than that. I realized pretty quickly that this axis was strongly correlated with character strength. That means we only really have one useful axis on which to see the natural clustering. However, this problem can be solved by some simple normalization, basically rescaling each character's machup data from positive and negative numbers representing positive and negative matchups to a 0-1 scale where 0 is their worst matchup and 1 is their best. This should fix the problem. The resulting plot looks like this: 
+
+<img src="/images/analysis_ssbu.png">
+
+Now we're getting somewhere! I've marked some emerging clusters that I noticed. The red are speedy combo characters, the green are projectile zoner characters who don't favor approaching, and the blue characters are spacers who use tools such as large sword swings to put some distance between them and their opponents. I'm sure someone with a better knowledge of the game could find better clusters or poke holes in my simple descriptions of the results, but this is certainly promising. 
+
+One thing that I do need to point out is that there is once again a major dispairity between the amount of variance explained by each axis, albeit on a smaller scale. However, it's not immediately obvious what that axis describes. So I looked at the matchups most influential to this principal component. And honestly, I was amazed at what I saw. 
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align:center; width:60px;">Rank</th>
+      <th style="text-align:left; width:220px;">Character</th>
+      <th style="text-align:center; width:110px;">Contribution</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="text-align:center;">1</td><td>Toon Link</td><td style="text-align:center;">+0.1550</td></tr>
+    <tr><td style="text-align:center;">2</td><td>Link</td><td style="text-align:center;">+0.1529</td></tr>
+    <tr><td style="text-align:center;">3</td><td>Banjo &amp; Kazooie</td><td style="text-align:center;">+0.1485</td></tr>
+    <tr><td style="text-align:center;">4</td><td>Bowser Jr.</td><td style="text-align:center;">+0.1418</td></tr>
+    <tr><td style="text-align:center;">5</td><td>Zelda</td><td style="text-align:center;">+0.1405</td></tr>
+    <tr><td style="text-align:center;">6</td><td>Young Link</td><td style="text-align:center;">+0.1377</td></tr>
+    <tr><td style="text-align:center;">7</td><td>King Dedede</td><td style="text-align:center;">+0.1363</td></tr>
+    <tr><td style="text-align:center;">8</td><td>Robin</td><td style="text-align:center;">+0.1351</td></tr>
+    <tr><td style="text-align:center;">9</td><td>Greninja</td><td style="text-align:center;">+0.1347</td></tr>
+    <tr><td style="text-align:center;">10</td><td>King K. Rool</td><td style="text-align:center;">+0.1341</td></tr>
+    <tr><td style="text-align:center;">11</td><td>Simon</td><td style="text-align:center;">+0.1329</td></tr>
+  </tbody>
+</table>
+<br>
+
+With the possible exception of Greninja and possibly King Dedede, every single one of these characters are difficult to approach due to space controlling projectiles. This is absolutely one of the most important thing to determining the differences between characters. In order to counter projectile charaacters like these, you need air speed, one of the most important character traits in Smash Ultimate. 
+
+On the other hand, the second Principal Component didn't come up with such an obvious distinction. Here are the top contributors to the second principal component:
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align:center; width:60px;">Rank</th>
+      <th style="text-align:left; width:220px;">Character</th>
+      <th style="text-align:center; width:110px;">Contribution</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="text-align:center;">1</td><td>Mario</td><td style="text-align:center;">+0.2443</td></tr>
+    <tr><td style="text-align:center;">2</td><td>Ness</td><td style="text-align:center;">+0.2314</td></tr>
+    <tr><td style="text-align:center;">3</td><td>Mr. Game &amp; Watch</td><td style="text-align:center;">+0.2217</td></tr>
+    <tr><td style="text-align:center;">4</td><td>Dr. Mario</td><td style="text-align:center;">+0.2181</td></tr>
+    <tr><td style="text-align:center;">5</td><td>Kirby</td><td style="text-align:center;">+0.2105</td></tr>
+    <tr><td style="text-align:center;">6</td><td>Diddy Kong</td><td style="text-align:center;">-0.1906</td></tr>
+    <tr><td style="text-align:center;">7</td><td>Ice Climbers</td><td style="text-align:center;">+0.1900</td></tr>
+    <tr><td style="text-align:center;">8</td><td>Rosalina &amp; Luma</td><td style="text-align:center;">+0.1876</td></tr>
+    <tr><td style="text-align:center;">9</td><td>Min-Min</td><td style="text-align:center;">-0.1873</td></tr>
+    <tr><td style="text-align:center;">10</td><td>Shiek</td><td style="text-align:center;">-0.1826</td></tr>
+    <tr><td style="text-align:center;">11</td><td>Pyra/Mythra</td><td style="text-align:center;">-0.1814</td></tr>
+  </tbody>
+</table>
+
+<br>
+
+
+While there are quite a few more combo-characters in here, we also have wildcards such as Rosalina & Luma, Min-Min, and Dr. Mario. So either this Principal Component is on a higher plane of thought and has realized something my feable mortal brain cannot fathom, or it's just a throwaway. I'm leaning more towards the latter since it only explains 7% of the variance. 
+
+By analyzing matchup data exclusively we haven't found the natural clustering we were looking for at the start, but we do have a very promising start as the analysis identified mobility as one of the most decisive factors to a character's archetype. There is certainly a lot more work that can be done here. I've seen <a href="https://github.com/gaistou/smash_ultimate_stats">some work done by others</a> trying to do exactly what I'm trying to do while working with distinct data from my own. So I'm excited to try new things and see if I can build upon the research I've found with my own contributions. 
+
+So for the time being, I'll revert from a data science to a gamer and try and solve my matchup problem by ... <span style="background-color: #111; color: #111; border-radius: 4px; padding: 2px 8px; cursor: pointer;" onclick="this.style.color='#fff'; this.style.backgroundColor='#222'; this.style.transition='color 0.2s, background 0.2s'; this.innerText='Begging for balance changes. PLEASE NERF STEVE'">Begging for balance changes. PLEASE NERF STEVE</span>
