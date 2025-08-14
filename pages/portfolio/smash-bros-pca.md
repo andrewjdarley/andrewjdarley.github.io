@@ -16,12 +16,17 @@ Smash Bros is just that kind of game. And that has simultaneously been one of my
 
 That's what gave me the idea for this project. This concept of matchup analysis is one that has been torn apart by the community. Below I've attached what is known as a matchup chart which places each character in the cast in a level depending on how easy or difficult their matchup against my characters. 
 
-From top to bottom, we have Wolf, Palutena, then Byleth
+From left to right, we have Wolf, Palutena, then Byleth
 
-<div style="display: flex; flex-direction: column; gap: 16px; align-items: stretch;">
-  <img src="/images/wolf_chart.webp" alt="Wolf Character Analysis Chart" style="width: 100%; max-width: 100%; height: auto; display: block;" />
-  <img src="/images/palutena_chart.webp" alt="Palutena Character Analysis Chart" style="width: 100%; max-width: 100%; height: auto; display: block;" />
-  <img src="/images/byleth_chart.jpg" alt="Byleth Character Analysis Chart" style="width: 100%; max-width: 100%; height: auto; display: block;" />
+<div style="width: 100%; margin: 0 auto;">
+  <div style="overflow-x: auto; white-space: nowrap; border: 1px solid #ccc; border-radius: 8px; padding: 12px; background: #fafafa;">
+    <img src="/images/wolf_chart.webp" alt="Wolf Character Analysis Chart" style="display: inline-block; width: 600px; height: auto; margin-right: 16px; vertical-align: top;" />
+    <img src="/images/palutena_chart.webp" alt="Palutena Character Analysis Chart" style="display: inline-block; width: 600px; height: auto; margin-right: 16px; vertical-align: top;" />
+    <img src="/images/byleth_chart.jpg" alt="Byleth Character Analysis Chart" style="display: inline-block; width: 600px; height: auto; vertical-align: top;" />
+  </div>
+  <div style="text-align: center; font-size: 0.95em; color: #666; margin-top: 6px;">
+    <em>Scroll to view all three matchup charts</em>
+  </div>
 </div>
 
 While these are higher level matchup charts and should be expected to differ from my amateur experience, we can see some of the trends that I experienced in my gameplay. For instance, Steve is listed as a difficult matchup for all three of them while Mr. Game and Watch is marked as one of Byleth's relative easier matchups. 
