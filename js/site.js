@@ -383,7 +383,7 @@ class GitHubPagesSite {
 
     updatePageMeta(page) {
         const titles = {
-            'home': 'Andrew Darley - Portfolio',
+            'home': 'Andrew Darley',
             'about': 'About - Andrew Darley',
             'resume': 'Resume - Andrew Darley',
             'portfolio': 'Portfolio - Andrew Darley'
