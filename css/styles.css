@@ -26,14 +26,17 @@ nav {
 
 /* Collapsed state */
 nav.collapsed {
-    padding: 0.25rem 0;
-    min-height: 40px;
+    padding: 0;
+    min-height: 0;
+    max-height: 0;
+    overflow: hidden;
 }
 
 nav.collapsed .nav-links {
     opacity: 0;
     transform: translateY(-100%);
     pointer-events: none;
+    max-height: 0;
 }
 
 .nav-container {
@@ -51,7 +54,7 @@ nav.collapsed .nav-links {
 /* Navigation Toggle Button */
 .nav-toggle {
     position: absolute;
-    left: 2rem;
+    right: 2rem;
     bottom: 0.5rem;
     background: transparent;
     border: none;
@@ -62,7 +65,7 @@ nav.collapsed .nav-links {
     border-radius: 4px;
     transition: all 0.3s ease;
     z-index: 101;
-    display: flex;
+    display: none; /* Hidden by default */
     align-items: center;
     justify-content: center;
     width: 40px;
@@ -78,10 +81,35 @@ nav.collapsed .nav-links {
     transition: transform 0.3s ease;
 }
 
-/* When collapsed, move toggle to top-left and rotate arrow */
+/* Show toggle button when nav is multi-row (forced by container height) */
+.nav-container.multi-row .nav-toggle {
+    display: flex;
+}
+
+/* Show toggle button when nav container height indicates wrapping */
+@media (max-height: 80px) {
+    .nav-toggle {
+        display: flex;
+    }
+}
+
+/* Also show at smaller screen widths where wrapping is likely */
+@media (max-width: 700px) {
+    .nav-toggle {
+        display: flex;
+    }
+}
+
+/* When collapsed, move toggle to top-right and rotate arrow */
 nav.collapsed .nav-toggle {
+    position: fixed;
     top: 0.5rem;
+    right: 0.5rem;
+    left: auto;
     bottom: auto;
+    z-index: 1000;
+    background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 nav.collapsed .toggle-arrow {
@@ -320,6 +348,12 @@ main {
     margin: 0 auto;
     padding: 2rem 1rem;
     min-height: calc(100vh - 80px);
+    transition: padding-top 0.3s ease;
+}
+
+/* When nav is collapsed, reduce top padding */
+nav.collapsed + main {
+    padding-top: 1rem;
 }
 
 /* Loading State */
@@ -507,6 +541,10 @@ main {
         padding: 0.5rem 1rem;
     }
     
+    .nav-toggle {
+        right: 1rem;
+    }
+    
     /* 
     #custom-signin-btn,
     .auth-btn {
@@ -527,6 +565,13 @@ main {
     
     .nav-links a {
         padding: 0.4rem 0.8rem;
+    }
+    
+    .nav-toggle {
+        right: 0.5rem;
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
     }
     
     /*
@@ -566,6 +611,21 @@ main {
     .nav-links {
         justify-content: center;
         flex-wrap: wrap;
+    }
+    
+    .nav-toggle {
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+        bottom: auto;
+    }
+    
+    nav.collapsed .nav-toggle {
+        position: fixed;
+        top: 0.25rem;
+        right: 0.25rem;
+        background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
     
     /*

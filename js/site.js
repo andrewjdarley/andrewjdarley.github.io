@@ -249,6 +249,70 @@ class GitHubPagesSite {
         });
     }
 
+    setupNavToggle() {
+        const navToggle = document.getElementById('nav-toggle');
+        const nav = document.querySelector('nav');
+        const navContainer = document.querySelector('.nav-container');
+        
+        if (!navToggle || !nav || !navContainer) {
+            console.error('Navigation toggle elements not found');
+            return;
+        }
+
+        // Check if nav was previously collapsed (from localStorage)
+        const wasCollapsed = localStorage.getItem('navCollapsed') === 'true';
+        if (wasCollapsed) {
+            nav.classList.add('collapsed');
+        }
+
+        // Function to check if nav is multi-row
+        const checkMultiRow = () => {
+            const navLinks = navContainer.querySelector('.nav-links');
+            const navItems = navContainer.querySelectorAll('.nav-links li');
+            const navContainerHeight = navContainer.offsetHeight;
+            const navLinksHeight = navLinks.offsetHeight;
+            
+            console.log('Nav container height:', navContainerHeight);
+            console.log('Nav links height:', navLinksHeight);
+            
+            // Method 1: Check if container height indicates wrapping
+            let isMultiRow = navContainerHeight > navLinksHeight + 30;
+            
+            // Method 2: Check if any nav items are positioned below the first item
+            if (navItems.length > 1) {
+                const firstItemTop = navItems[0].getBoundingClientRect().top;
+                const lastItemTop = navItems[navItems.length - 1].getBoundingClientRect().top;
+                
+                console.log('First item top:', firstItemTop);
+                console.log('Last item top:', lastItemTop);
+                
+                if (lastItemTop > firstItemTop + 15) {
+                    isMultiRow = true;
+                }
+            }
+            
+            if (isMultiRow) {
+                navContainer.classList.add('multi-row');
+                console.log('Multi-row detected - toggle button should be visible');
+            } else {
+                navContainer.classList.remove('multi-row');
+                console.log('Single row - toggle button hidden');
+            }
+        };
+
+        // Check on load and resize
+        setTimeout(checkMultiRow, 100); // Small delay to ensure DOM is rendered
+        window.addEventListener('resize', checkMultiRow);
+
+        navToggle.addEventListener('click', () => {
+            nav.classList.toggle('collapsed');
+            
+            // Save state to localStorage
+            const isCollapsed = nav.classList.contains('collapsed');
+            localStorage.setItem('navCollapsed', isCollapsed.toString());
+        });
+    }
+
     setupMarkdown() {
         const renderer = new marked.Renderer();
         
