@@ -46,8 +46,6 @@ class GitHubPagesSite {
         this.createAuthUI();
     }
 
-    // Replace the createAuthUI method in your GitHubPagesSite class with this:
-
     createAuthUI() {
         // The auth nav item already exists in HTML, just set up the functionality
         const authNavLink = document.getElementById('auth-nav-link');
@@ -93,7 +91,6 @@ class GitHubPagesSite {
         });
     }
 
-    // Add this new method to handle the dropdown toggle
     toggleSignOutDropdown() {
         const dropdown = document.getElementById('sign-out-dropdown');
         if (dropdown) {
@@ -101,7 +98,6 @@ class GitHubPagesSite {
         }
     }
 
-    // Update the updateAuthUI method to work with the new inline structure
     updateAuthUI() {
         const authNavLink = document.getElementById('auth-nav-link');
         const authNavItem = document.getElementById('auth-nav-item');
@@ -128,7 +124,6 @@ class GitHubPagesSite {
         }
     }
 
-    // Update the signOut method to hide the dropdown
     signOut() {
         this.user = null;
         this.isAdmin = false;
@@ -179,36 +174,6 @@ class GitHubPagesSite {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
         return JSON.parse(jsonPayload);
-    }
-
-    updateAuthUI() {
-        const customSigninBtn = document.getElementById('custom-signin-btn');
-        const userInfo = document.getElementById('user-info');
-        const userAvatar = document.getElementById('user-avatar');
-        const userName = document.getElementById('user-name');
-
-        if (this.user) {
-            customSigninBtn.style.display = 'none';
-            userInfo.style.display = 'flex';
-            userInfo.style.alignItems = 'center';
-            userAvatar.src = this.user.picture;
-            userName.textContent = this.user.name + (this.isAdmin ? ' (Admin)' : '');
-        } else {
-            customSigninBtn.style.display = 'block';
-            userInfo.style.display = 'none';
-        }
-    }
-
-    signOut() {
-        this.user = null;
-        this.isAdmin = false;
-        this.updateAuthUI();
-        this.refreshCurrentPage();
-        
-        // Sign out from Google
-        if (window.google) {
-            google.accounts.id.disableAutoSelect();
-        }
     }
 
     refreshCurrentPage() {
