@@ -3,18 +3,226 @@ class GitHubPagesSite {
         this.currentPage = 'home';
         this.cache = new Map();
         this.portfolioIndex = null;
+        this.user = null;
+        this.isAdmin = false;
+        this.adminEmails = ['andrewjdarley@gmail.com']; // Add your admin emails here
         this.init();
     }
 
     init() {
+        this.initGoogleAuth();
         this.setupNavigation();
         this.setupMarkdown();
         this.setupResizeHandler();
+        this.setupNavToggle();
         this.loadInitialPage();
     }
 
+    async initGoogleAuth() {
+        // Load Google Identity Services
+        if (!window.google) {
+            const script = document.createElement('script');
+            script.src = 'https://accounts.google.com/gsi/client';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+            
+            // Wait for the script to load
+            await new Promise((resolve) => {
+                script.onload = resolve;
+            });
+        }
+
+        // Initialize Google Auth
+        if (window.google) {
+            google.accounts.id.initialize({
+                client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual client ID
+                callback: this.handleGoogleSignIn.bind(this),
+                auto_select: false,
+                cancel_on_tap_outside: true
+            });
+        }
+
+        this.createAuthUI();
+    }
+
+    // Replace the createAuthUI method in your GitHubPagesSite class with this:
+
+    createAuthUI() {
+        // The auth nav item already exists in HTML, just set up the functionality
+        const authNavLink = document.getElementById('auth-nav-link');
+        const authNavItem = document.getElementById('auth-nav-item');
+        
+        if (!authNavLink || !authNavItem) {
+            console.error('Auth nav elements not found');
+            return;
+        }
+    
+        // Add click handler for sign in - make sure to prevent default and stop propagation
+        authNavLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent any other navigation handlers from firing
+            
+            if (this.user) {
+                // If signed in, toggle dropdown or sign out directly
+                this.toggleSignOutDropdown();
+            } else {
+                // If not signed in, trigger Google auth
+                if (window.google) {
+                    google.accounts.id.prompt();
+                } else {
+                    console.log('Google auth not loaded yet');
+                }
+            }
+        });
+        
+        // Create sign out dropdown (hidden by default)
+        const dropdown = document.createElement('div');
+        dropdown.id = 'sign-out-dropdown';
+        dropdown.innerHTML = `
+            <button onclick="window.site.signOut()">Sign Out</button>
+        `;
+        authNavItem.appendChild(dropdown);
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('sign-out-dropdown');
+            if (dropdown && !authNavItem.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    }
+
+    // Add this new method to handle the dropdown toggle
+    toggleSignOutDropdown() {
+        const dropdown = document.getElementById('sign-out-dropdown');
+        if (dropdown) {
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+    }
+
+    // Update the updateAuthUI method to work with the new inline structure
+    updateAuthUI() {
+        const authNavLink = document.getElementById('auth-nav-link');
+        const authNavItem = document.getElementById('auth-nav-item');
+        
+        if (!authNavLink || !authNavItem) return;
+
+        if (this.user) {
+            // User is signed in - show user info
+            authNavItem.classList.add('signed-in');
+            authNavLink.innerHTML = `
+                <img id="user-avatar" src="${this.user.picture}" alt="User Avatar">
+                <span id="user-name">${this.user.name}</span>
+            `;
+        } else {
+            // User is not signed in - show sign in button
+            authNavItem.classList.remove('signed-in');
+            authNavLink.innerHTML = 'Sign In';
+            
+            // Hide dropdown if it exists
+            const dropdown = document.getElementById('sign-out-dropdown');
+            if (dropdown) {
+                dropdown.style.display = 'none';
+            }
+        }
+    }
+
+    // Update the signOut method to hide the dropdown
+    signOut() {
+        this.user = null;
+        this.isAdmin = false;
+        this.updateAuthUI();
+        this.refreshCurrentPage();
+        
+        // Hide dropdown
+        const dropdown = document.getElementById('sign-out-dropdown');
+        if (dropdown) {
+            dropdown.style.display = 'none';
+        }
+        
+        // Sign out from Google
+        if (window.google) {
+            google.accounts.id.disableAutoSelect();
+        }
+    }
+
+    handleGoogleSignIn(response) {
+        try {
+            // Decode the JWT token to get user info
+            const userInfo = this.parseJwt(response.credential);
+            this.user = {
+                email: userInfo.email,
+                name: userInfo.name,
+                picture: userInfo.picture,
+                sub: userInfo.sub
+            };
+
+            // Check if user is admin
+            this.isAdmin = this.adminEmails.includes(this.user.email);
+
+            this.updateAuthUI();
+            
+            // Refresh current page to show/hide unpublished content
+            this.refreshCurrentPage();
+            
+            console.log('User signed in:', this.user);
+        } catch (error) {
+            console.error('Error handling sign in:', error);
+        }
+    }
+
+    parseJwt(token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    }
+
+    updateAuthUI() {
+        const customSigninBtn = document.getElementById('custom-signin-btn');
+        const userInfo = document.getElementById('user-info');
+        const userAvatar = document.getElementById('user-avatar');
+        const userName = document.getElementById('user-name');
+
+        if (this.user) {
+            customSigninBtn.style.display = 'none';
+            userInfo.style.display = 'flex';
+            userInfo.style.alignItems = 'center';
+            userAvatar.src = this.user.picture;
+            userName.textContent = this.user.name + (this.isAdmin ? ' (Admin)' : '');
+        } else {
+            customSigninBtn.style.display = 'block';
+            userInfo.style.display = 'none';
+        }
+    }
+
+    signOut() {
+        this.user = null;
+        this.isAdmin = false;
+        this.updateAuthUI();
+        this.refreshCurrentPage();
+        
+        // Sign out from Google
+        if (window.google) {
+            google.accounts.id.disableAutoSelect();
+        }
+    }
+
+    refreshCurrentPage() {
+        // Refresh the current page to apply auth changes
+        if (this.currentPage === 'portfolio') {
+            this.loadPortfolioListing();
+        } else {
+            this.loadMarkdownPage(this.currentPage);
+        }
+    }
+
     setupNavigation() {
-        const navLinks = document.querySelectorAll('.nav-links a');
+        // Only add navigation listeners to actual page navigation links, not the auth link
+        const navLinks = document.querySelectorAll('.nav-links a:not(#auth-nav-link)');
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -62,10 +270,15 @@ class GitHubPagesSite {
     }
 
     updateActiveNav(activeLink) {
-        document.querySelectorAll('.nav-links a').forEach(link => {
+        // Remove active class from all navigation links (but not auth link)
+        document.querySelectorAll('.nav-links a:not(#auth-nav-link)').forEach(link => {
             link.classList.remove('active');
         });
-        activeLink.classList.add('active');
+        
+        // Add active class to the clicked link (if it's not the auth link)
+        if (activeLink && activeLink.id !== 'auth-nav-link') {
+            activeLink.classList.add('active');
+        }
     }
 
     loadInitialPage() {
@@ -216,31 +429,46 @@ class GitHubPagesSite {
         try {
             const portfolioItems = await this.loadPortfolioIndex();
             
+            // Filter out unpublished items unless user is admin
+            const visibleItems = portfolioItems.filter(item => {
+                if (item.published === false && !this.isAdmin) {
+                    return false;
+                }
+                return true;
+            });
+            
             let html = `
                 <div class="markdown-content">
                     <h1>Portfolio</h1>
             `;
 
-            if (portfolioItems.length === 0) {
-                html += `
-                    <p>No portfolio items found. Create an <code>index.json</code> file in your <code>pages/portfolio/</code> directory to list your projects.</p>
-                    <h3>Example index.json structure:</h3>
-                    <pre><code>[
+            if (visibleItems.length === 0) {
+                if (portfolioItems.length > visibleItems.length && !this.isAdmin) {
+                    html += `
+                        <p>No published portfolio items found. Some items may be in draft status.</p>
+                    `;
+                } else {
+                    html += `
+                        <p>No portfolio items found. Create an <code>index.json</code> file in your <code>pages/portfolio/</code> directory to list your projects.</p>
+                        <h3>Example index.json structure:</h3>
+                        <pre><code>[
   {
     "slug": "my-awesome-project",
     "title": "My Awesome Project",
     "description": "A brief description of the project",
     "tags": ["React", "Node.js", "MongoDB"],
     "date": "2024-01-15",
-    "featured": true
+    "featured": true,
+    "published": true
   }
 ]</code></pre>
-                `;
+                    `;
+                }
                 html += '</div>';
                 document.getElementById('content').innerHTML = html;
             } else {
                 // Sort by featured first, then by date (newest first)
-                const sortedItems = portfolioItems.sort((a, b) => {
+                const sortedItems = visibleItems.sort((a, b) => {
                     if (a.featured && !b.featured) return -1;
                     if (!a.featured && b.featured) return 1;
                     return new Date(b.date || '1970-01-01') - new Date(a.date || '1970-01-01');
@@ -287,10 +515,15 @@ class GitHubPagesSite {
                 });
             }
 
+            // Add draft indicator for admins
+            const draftIndicator = (item.published === false && this.isAdmin) ? 
+                '<div class="draft-indicator" style="background: #ff6b6b; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin-bottom: 0.5rem; display: inline-block;">DRAFT</div>' : '';
+
             const cardElement = document.createElement('div');
             cardElement.className = 'post-card';
             cardElement.onclick = () => this.navigateToPost('portfolio', item.slug);
             cardElement.innerHTML = `
+                ${draftIndicator}
                 <h3>${item.title || item.slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h3>
                 ${dateHtml ? `<div class="meta">${dateHtml}</div>` : ''}
                 <div class="excerpt">${item.description || 'No description available'}</div>
@@ -398,11 +631,32 @@ class GitHubPagesSite {
 
     async loadPost(type, filename) {
         try {
+            // Check if this post should be visible
+            if (!this.isAdmin) {
+                const portfolioItems = await this.loadPortfolioIndex();
+                const item = portfolioItems.find(item => item.slug === filename);
+                if (item && item.published === false) {
+                    this.showError('This post is not published yet.');
+                    return;
+                }
+            }
+
             const content = await this.fetchMarkdown(`/pages/${type}/${filename}.md`);
             const html = marked.parse(content);
             
+            // Add draft banner for admins viewing unpublished posts
+            let draftBanner = '';
+            if (this.isAdmin) {
+                const portfolioItems = await this.loadPortfolioIndex();
+                const item = portfolioItems.find(item => item.slug === filename);
+                if (item && item.published === false) {
+                    draftBanner = '<div style="background: #ff6b6b; color: white; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; text-align: center; font-weight: bold;">⚠️ DRAFT POST - Only visible to admins</div>';
+                }
+            }
+            
             document.getElementById('content').innerHTML = `
                 <div class="markdown-content">
+                    ${draftBanner}
                     ${html}
                 </div>
             `;

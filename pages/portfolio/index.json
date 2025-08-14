@@ -1,4 +1,3 @@
-
 [
     {
         "slug": "smash-bros-pca",
@@ -6,7 +5,8 @@
         "description": "Analyzing community-provided matchup tier list data to identify playstyle patterns",
         "tags": ["PCA", "Clustering", "Unsupervised Learning"],
         "date": "2024-08-12",
-        "featured": false
+        "featured": false,
+        "published": true
     },
     {
         "slug": "cta-auto-card",
@@ -14,7 +14,7 @@
         "description": "ML system that predicts difficulty, stats, and rewards for existing challenge concepts using KNN on sentence embeddings to find similar challenges",
         "tags": ["KNN", "Embeddings", "NLP"],
         "date": "2024-08-13",
-        "featured": true
+        "featured": true,
+        "published": false
     }
-
-]                           
+]

@@ -14,11 +14,18 @@
 <body>
     <nav>
         <div class="nav-container">
+            <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+                <span class="toggle-arrow">▼</span>
+            </button>
             <ul class="nav-links">
                 <li><a href="/" data-page="home">Home</a></li>
                 <li><a href="/about" data-page="about">About</a></li>
                 <li><a href="/resume" data-page="resume">Resume</a></li>
                 <li><a href="/portfolio" data-page="portfolio">Portfolio</a></li>
+                <!-- Auth button will be inserted here dynamically -->
+                <li id="auth-nav-item">
+                    <a href="#" id="auth-nav-link">Sign In</a>
+                </li>
             </ul>
         </div>
     </nav>

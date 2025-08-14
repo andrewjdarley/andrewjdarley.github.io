@@ -12,7 +12,7 @@ body {
     min-height: 100vh;
 }
 
-/* Navigation Bar */
+/* Navigation Bar - FIXED VERSION */
 nav {
     background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
     padding: 1rem 0;
@@ -20,28 +20,87 @@ nav {
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+/* Collapsed state */
+nav.collapsed {
+    padding: 0.25rem 0;
+    min-height: 40px;
+}
+
+nav.collapsed .nav-links {
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
 }
 
 .nav-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 1rem;
+    padding: 0 2rem;
+    min-height: 60px;
+    flex-wrap: nowrap; /* Force single line */
+    position: relative;
 }
 
+/* Navigation Toggle Button */
+.nav-toggle {
+    position: absolute;
+    left: 2rem;
+    bottom: 0.5rem;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    z-index: 101;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.nav-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.toggle-arrow {
+    transition: transform 0.3s ease;
+}
+
+/* When collapsed, move toggle to top-left and rotate arrow */
+nav.collapsed .nav-toggle {
+    top: 0.5rem;
+    bottom: auto;
+}
+
+nav.collapsed .toggle-arrow {
+    transform: rotate(180deg);
+}
+
+/* Navigation Links */
 .nav-links {
     display: flex;
-    gap: 2rem;
+    gap: clamp(1rem, 2vw, 2rem);
     list-style: none;
-    flex-wrap: wrap;
-    justify-content: center;
+    align-items: center;
+    margin: 0;
+    flex-wrap: nowrap; /* Prevent wrapping */
+    transition: all 0.3s ease;
 }
 
 .nav-links li {
-    min-width: 120px;
-    text-align: center;
+    flex-shrink: 0;
 }
 
 .nav-links a {
@@ -54,19 +113,188 @@ nav {
     transition: all 0.3s ease;
     position: relative;
     cursor: pointer;
-    display: inline-block;
-    width: 100%;
-    box-sizing: border-box;
+    display: block;
+    white-space: nowrap;
+    min-width: fit-content;
 }
 
 .nav-links a:hover {
     color: #ff8c00;
     letter-spacing: 0.08em;
+    transform: translateY(-1px);
 }
 
 .nav-links a.active {
     background: #4169e1;
     color: #ffffff;
+}
+
+/* 
+.auth-container {
+    display: flex !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+    margin-left: auto !important; 
+}
+
+#auth-button-container {
+    display: flex !important;
+    align-items: center !important;
+}
+
+#custom-signin-btn,
+.auth-btn {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem) !important;
+    padding: 0.6rem 1.2rem !important;
+    border-radius: 6px !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    font-family: inherit !important;
+    white-space: nowrap !important;
+    min-width: fit-content !important;
+}
+
+#custom-signin-btn:hover,
+.auth-btn:hover {
+    color: #ff8c00 !important;
+    letter-spacing: 0.08em !important;
+    transform: translateY(-1px) !important;
+}
+
+#user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #ffffff;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+#user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+#user-name {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#sign-out-btn {
+    padding: 0.6rem 1.2rem;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-family: inherit;
+    margin-left: 0.5rem;
+}
+
+#sign-out-btn:hover {
+    background: #ff6666;
+    transform: translateY(-1px);
+}
+
+#google-signin-button {
+    display: none;
+}
+*/
+
+/* New inline auth styles - the auth button will use the same styles as nav links */
+#auth-nav-link {
+    /* Inherits all styles from .nav-links a automatically */
+}
+
+/* When signed in, show user info in a compact format */
+#auth-nav-item.signed-in #auth-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+}
+
+#auth-nav-item.signed-in #user-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#auth-nav-item.signed-in #user-name {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.9em;
+}
+
+/* Sign out functionality - we'll add a small indicator or use click to toggle */
+#auth-nav-item.signed-in #auth-nav-link:after {
+    content: " ↓";
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+/* Dropdown for sign out (optional - or you can make clicking the name sign out) */
+#auth-nav-item.signed-in {
+    position: relative;
+}
+
+#sign-out-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #16213e;
+    border: 1px solid rgba(65, 105, 225, 0.3);
+    border-radius: 6px;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    display: none;
+    z-index: 1000;
+    min-width: 120px;
+}
+
+#sign-out-dropdown button {
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    width: 100%;
+    transition: background 0.3s ease;
+}
+
+#sign-out-dropdown button:hover {
+    background: #ff6666;
+}
+
+/* Draft Indicator */
+.draft-indicator {
+    background: #ff6b6b;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    font-weight: bold;
 }
 
 /* Markdown Content - Custom Link Style */
@@ -137,7 +365,7 @@ main {
 }
 
 .markdown-content h3 {
-    color: #b3d1ff; /* Lighter blue for more pop */
+    color: #b3d1ff;
     margin: 1.5rem 0 0.5rem 0;
     font-size: 1.5rem;
 }
@@ -269,16 +497,45 @@ main {
     transform: translateX(-5px);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* RESPONSIVE - Only break the layout when absolutely necessary */
+@media (max-width: 900px) {
     .nav-links {
         gap: 1rem;
     }
-
+    
     .nav-links a {
         padding: 0.5rem 1rem;
-        font-size: 1rem;
     }
+    
+    /* 
+    #custom-signin-btn,
+    .auth-btn {
+        padding: 0.5rem 1rem !important;
+        font-size: 1rem !important;
+    }
+    */
+}
+
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 0 1rem;
+    }
+    
+    .nav-links {
+        gap: 0.75rem;
+    }
+    
+    .nav-links a {
+        padding: 0.4rem 0.8rem;
+    }
+    
+    /*
+    #custom-signin-btn,
+    .auth-btn {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 0.95rem !important;
+    }
+    */
 
     main {
         padding: 1rem;
@@ -298,13 +555,82 @@ main {
     }
 }
 
+/* ONLY stack vertically on very small screens */
+@media (max-width: 600px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    /*
+    .auth-container {
+        justify-content: center;
+        margin-left: 0 !important;
+    }
+    
+    #user-info {
+        flex-direction: column;
+        gap: 0.25rem;
+        text-align: center;
+    }
+    
+    #user-name {
+        font-size: 0.8rem;
+        max-width: 120px;
+    }
+    
+    #sign-out-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        margin-left: 0;
+        margin-top: 0.25rem;
+    }
+    */
+}
+
 @media (max-width: 480px) {
     .nav-links {
         flex-direction: column;
         gap: 0.5rem;
+        width: 100%;
     }
+    
+    .nav-links li {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .nav-links a {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem 1rem;
+    }
+    
+    /*
+    #user-avatar {
+        width: 28px;
+        height: 28px;
+    }
+    */
+}
 
+/* Large screens optimization */
+@media (min-width: 1200px) {
     .nav-container {
-        padding: 0 0.5rem;
+        padding: 0 3rem;
+    }
+    
+    .nav-links {
+        gap: 2.5rem;
+    }
+    
+    .nav-links a {
+        padding: 0.7rem 1.4rem;
     }
 }
