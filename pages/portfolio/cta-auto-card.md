@@ -20,3 +20,4 @@ Without delving too much into the specifics, the game proceeds from this point i
 
 Initially, my brothers and I enjoyed playing the game according to the written rules, competing for points using the system designed in the rules. We also played into the storytelling aspect that this game aims to create by telling the stories that emerged through this gameplay. We played this way for a long time until eventually one of our games inspired a short D&D campaign where the events of our game of Call to Adventure were the lore of the world we played in. After that we began creating D&D characters based on the stories we made in the game and battled them against each other, coming up with a ruleset for converting your story into a character. 
 
+Eventually we 
