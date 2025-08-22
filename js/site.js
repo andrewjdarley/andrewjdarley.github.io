@@ -630,12 +630,35 @@ class GitHubPagesSite {
         this.loadPost(type, slug);
     }
 
-    updatePostMeta(type, slug) {
-        // For now, use a generic title and description
-        // In a more advanced implementation, you could fetch the post metadata
-        // from the markdown frontmatter or a separate metadata file
-        const title = `${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} - Andrew Darley`;
-        const description = `View Andrew Darley's project: ${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
+    // Replace the updatePostMeta function in your site.js file
+    async updatePostMeta(type, slug) {
+        let title, description;
+        
+        if (type === 'portfolio') {
+            // Load portfolio index to get the actual title
+            try {
+                const portfolioItems = await this.loadPortfolioIndex();
+                const item = portfolioItems.find(item => item.slug === slug);
+                
+                if (item) {
+                    title = `${item.title} - Andrew Darley`;
+                    description = item.description || `View Andrew Darley's project: ${item.title}`;
+                } else {
+                    // Fallback if item not found in index
+                    title = `${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} - Andrew Darley`;
+                    description = `View Andrew Darley's project: ${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
+                }
+            } catch (error) {
+                console.error('Error loading portfolio index for meta:', error);
+                // Fallback to generic title
+                title = `${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} - Andrew Darley`;
+                description = `View Andrew Darley's project: ${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
+            }
+        } else {
+            // For other types, use generic title
+            title = `${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} - Andrew Darley`;
+            description = `View Andrew Darley's project: ${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
+        }
         
         document.title = title;
         
