@@ -28,6 +28,8 @@ Eventually we transitioned into a while different way to play the game. We would
 
 For example, one of the first characters I attempted this with was Wesley from <a href="https://en.wikipedia.org/wiki/The_Princess_Bride_(film)">The Princess Bride</a>. To create him I chose my origin to be Farmer and my motivation to be Sworn Protector. Then I chose challenges in chronological order that reflected the major events of the story. Things such as "Climb to Safety", "Outwit a Gang Boss", or "Survive the Flames". I also collected allies, another mechanic I haven't really explained, such as "Swordmaster", or "True Love". Overall I was really satisfied with the way it all came together and this has been our main method of playing the game for the past while. 
 
+<img src="/images/asyouwish.webp">
+
 ### Building the Model
 
 Now finally, I can talk about the Data-Sciencey stuff after such a long-winded intro. Playing the game in this way made me wonder if we could just automatically expand the game. I was a bit skeptical as previous attempts to use ChatGPT to create things for Call to Adventure had shown very little understanding of the game's mechanics. But then after thinking about <a href="https://www.youtube.com/shorts/FJtFZwbvkI4">3blue1brown's video</a> on embedding spaces I came up with an idea. If you're unfamiliar with the concept of embedding spaces watch the video. It's only a minute long and will make this a lot more understandable.
@@ -51,6 +53,8 @@ Some of the results honestly turned out excellent. With regards to the correspon
 But of course, there were some straight up failures such as the Battle of Five Armies and the Final Battle from Avengers Endgame. Those both were classified as strength-only challenges. But obviously a challenge requiring uniting forces would need to involve Charisma and using the infinity stones would require Constitution. But since the word "Battle" was included in each of the challenge names the model latched onto that far too much and hence included Strength as the only stat.
 
 Additionally, in my experiments sometimes changing irrelevant details could completely change the results. Changing prepositions from "to" to "for" could change both of the predicted stats for the challenge. This is obviously very bad implying that the embedding space that I'm using is volatile and innacurate at times. We could certainly improve that though. 
+
+<img src="/images/fivearmies.jpg">
 
 ### Conclusion
 
