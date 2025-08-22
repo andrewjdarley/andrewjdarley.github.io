@@ -10,7 +10,7 @@ Bowser's "Tough Guy" mechanic allows him to soak up weaker attacks without flinc
 
 However, I soon realized that both Palutena and Wolf were both quite weak against Mr. Game and Watch, another popular character among my peers and one of the strongest in the game. To counter this disadvantageous matchup, I learned to play Byleth to cover the weaknesses of my roster. BUT THEN, the atrocious monstrosity that is Steve was added to the cast who was able to counter all three of my characters! 
 
-Can you see where this is going? 
+### Matchup Data
 
 Smash Bros is just that kind of game. And that has simultaneously been one of my favorite and one of my least favorite aspects of the game. I love how it feels different and unique to play each matchup, but I hate that my entire roster can be full-countered by a gameplay quirk unique to a single character. 
 
@@ -40,6 +40,8 @@ There is no standard format for these mathchup charts. Everyone labels their tie
 Initially, I went straight to manual annotation purgatory and began digitizing the information found on <a href="https://www.reddit.com/r/smashbros/comments/1j0o2r5/ultimate_matchup_chart_compilation_v13/">This reddit post</a>. That was a mistake. I had to deal with every pro's different labeling scheme, not to mention that some of the links on the list no longer functioned. So I set out to see if my work had already been done for me. 
 
 After some research I found <a href="https://www.reddit.com/r/smashbros/comments/1dns7t0/smash_ultimate_full_matchup_chart/">This dataset</a> generated using community-voted matchup information. While this is not the most accurate source, it certainly provides enough data for this experiment. 
+
+### Analysis
 
 To start, I did a <a href="https://www.ibm.com/think/topics/principal-component-analysis">PCA</a> on the matchup data in order to visualize what we were working with. 
 
@@ -108,6 +110,8 @@ On the other hand, the second Principal Component didn't come up with such an ob
 
 
 While there are quite a few more combo-characters in here, we also have wildcards such as Rosalina & Luma, Min-Min, and Dr. Mario. So either this Principal Component is on a higher plane of thought and has realized something my feable mortal brain cannot fathom, or it's just a throwaway. I'm leaning more towards the latter since it only explains 7% of the variance. 
+
+### Conclusion 
 
 By analyzing matchup data exclusively we haven't found the natural clustering we were looking for at the start, but we do have a very promising start as the analysis identified mobility as one of the most decisive factors to a character's archetype. There is certainly a lot more work that can be done here. I've seen <a href="https://github.com/gaistou/smash_ultimate_stats">some work done by others</a> trying to do exactly what I'm trying to do while working with distinct data from my own. So I'm excited to try new things and see if I can build upon the research I've found with my own contributions. 
 
