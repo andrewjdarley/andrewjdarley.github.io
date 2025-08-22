@@ -14,7 +14,16 @@
         "description": "ML system that predicts difficulty, stats, and rewards for existing challenge concepts using KNN on sentence embeddings to find similar challenges",
         "tags": ["KNN", "Embeddings", "NLP"],
         "date": "2024-08-21",
-        "featured": true,
+        "featured": false,
+        "published": true
+    },
+    {
+        "slug": "brawlstars-stats",
+        "title": "Statistical Analysis of the Brawl Stars Matchmaking Algorithm",
+        "description": "Trophy Thieves? More like Money Thieves! It's rigged",
+        "tags": ["Statistics", "Chi-Squared", "Data Wrangling"],
+        "date": "2024-08-22",
+        "featured": false,
         "published": true
     }
 ]
