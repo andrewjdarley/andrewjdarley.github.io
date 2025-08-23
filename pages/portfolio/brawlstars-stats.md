@@ -4,7 +4,7 @@
 
 The reality of all video games is they all need a monetization model. And among the thousands of garbage mobile games that all rely on ads or pay-to-win mechanics, Brawl Stars stands out with a much more enjoyable monetization model. Its big selling point is cosmetic items, more specifically, skins for your characters. 
 
-Featured in the center of the image above is a character named Amber's new skin and I think it looks absolutely amazing. The only skin available that is nearly as good as this "Dark Knight" theme is an Elsa-inspired skin with an ice theme. However, this skin was being given away to everyone who could get nine wins in a challenge before losing their four lives. If you did end up losing all four lives, you could pay a small amount of in-game currency to get some extra tries to get you the rest of the way. Sounds fair, right? 
+Featured in the center of the image above is a character named Amber's new skin and I think it looks absolutely amazing. The only skin available that is nearly as good as this "Dark Knight" theme is an Elsa-inspired skin with an ice theme. This skin was being given away to everyone who could get nine wins in a challenge before losing their four lives. If you did end up losing all four lives, you could pay a small amount of in-game currency to get some extra tries to get you the rest of the way. Sounds fair, right? 
 
 I ended up buying extra lives for this challenge far far far too many times. And I'm ticked about it. Ticked enough to write an expose on the matchmaking algorithm even though nobody has any idea what I'm talking about! 
 
@@ -44,7 +44,7 @@ To start I wanted to familiarize myself with the data. So I created a histogram 
 
 My original plan was to use the absolute value of total cumulative trophy difference between the two teams as a metric for team imbalance, but after seeing this distribution I realized that wouldn't be fair to the game developers as it would be impossible to keep that close to zero considering how strongly skewed the distribution is. So I took a different approach and began to focus on relative rank. 
 
-By relative rank, I mean this. Imagine that in this match, 6 random people were added into the lobby. A player's relative rank refers to how their cumulative trophy count compares to that of the other 5 people playing. If you have a higher cumulative trophy count than everyone else, you are considered relative rank 1. 
+By relative rank, I mean this: imagine that in this match, 6 random people were added into the lobby. A player's relative rank refers to how their cumulative trophy count compares to that of the other 5 people playing. If you have a higher cumulative trophy count than everyone else, you are considered relative rank 1. 
 
 A "fair" matchmaking algorithm in my opinion could either be random (each relative rank is no more likely to be placed on the same side with another relative rank) or adaptive (tries to include an even amount of "good players" and "bad players" on each side). Of these two, random selection provides a more definative and stronger null hypothesis. So we will proceed with the null hypothesis that states that the probability of any two players being on the same team is <b><i>independent</i></b> of their relative ranks.
 
@@ -52,6 +52,26 @@ We will test this against the alternative hypothesis that simply states the oppo
 
 To do this we will do a <a href="https://en.wikipedia.org/wiki/Chi-squared_test"> χ<sup>2</sup> test</a> of independence to determine whether the observed team compositions differ significantly from what we would expect under random assignment. 
 
-The following chart shows the frequency in which each relative rank is placed on the same team as each other relative rank. Under truly random matchmaking, these observed frequencies should be approximately equal - meaning any given relative rank should appear on the same team as any other relative rank with roughly the same frequency. The χ² test works perfectly for this analysis because it compares our observed frequencies against these expected equal frequencies, allowing us to determine whether any deviations from this equal distribution are statistically significant or simply due to random variation.
+The following chart shows the frequency in which each relative rank is placed on the same team as each other relative rank. Under truly random matchmaking, these observed frequencies should be approximately equal. As you can see though, there appears to be a trend where the top-3 are more likely to be teamed with others in the top-3 and vice versa. 
 
 <img src="/images/chi_table.png">
+
+There is a caveat we have to address here before moving forward with the statistical test, and that is the issue of teaming. Before a match of brawl stars you can play with a friend. Since these matches don't have the ability to be truly random we will have to throw them out. Meaning the only data we're working with is the blue data. But as you can see, the trend persists even after dropping these matches. 
+
+<img src="/images/bs-invalid.png">
+
+χ² tests are used to determine if there is a significant association between two categorical variables - in this case, whether a player's relative rank is associated with their teammate assignments. To perform this test we will first organize the data into a 6x5 <a href="https://en.wikipedia.org/wiki/Contingency_table">contingency table</a>. The second dimension becomes 5 once you drop yourself out, effectively redefining our scenario as "does your relative rank effect your assigned teammates relative ranks among the remaining five players?"
+
+Here is the contingency table: Higher frequency is darker and lower is lighter. 
+
+<img src="/images/bs-chitable.png">
+
+Under the null hypothesis, you'd expect the distribution to look the same on each row. However upon visual inspection you see that as your relative rank increases the peak of your team distribution shifts down as well which agrees with our findings to this poing. But is it statistically significant? 
+
+The χ<sup>2</sup> test yields a <a href="https://en.wikipedia.org/wiki/P-value">p-value</a> of &lt; 0.000001, allowing us to reject the null hypothesis and conclude with confidence that the Brawl Stars matchmaking algorithm for the free skin challenge is not random. 
+
+### Conclusion
+
+The statistical test alone is not enough to prove my initial claim that the matchmaking algorithm favors players of higher rank. All it shows is that there is a factor behind team-compositions beyond random chance. However, when you pair the test with the contingency table, you can see what kind of team-compositions are created due to the algorithm. 
+
+As I mentioned previously, there are two types of matchmaking algorithms that could be considered fair. We already proved that random-selection isn't supported by the evidence. But what about trying to create an even distribution of good and bad players on each team? If this were the case we would expect the strongest correlations to be in the top right and bottom left corners of the contingency table as those would represent the 
