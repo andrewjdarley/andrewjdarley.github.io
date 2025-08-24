@@ -21,7 +21,6 @@ Bachelors in BYU's ACME (Applied Computational and Mathematical Emphasis) progra
 
 **Teaching Assistant** for <a href="https://cs111.byu.edu/" style="color: #b3e5fc;">BYU's CS111</a> entry-level programming course. I helped students with technical difficulties and homework, and taught a lab secion twice a week.
 
-
 ## Professional Goals
 After I graduate, I want to go to Graduate School to study machine learning or data science. After which, I aim to find a job in data science or machine learning to apply my knowledge.
 
