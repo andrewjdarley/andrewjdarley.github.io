@@ -19,7 +19,7 @@ Bachelors in BYU's ACME (Applied Computational and Mathematical Emphasis) progra
 
 
 ## Professional Goals
-After I graduate, I want to go to Graduate School to study machine learning or data science in either a specific interest or generally. After which, I aim to find a job in data science or machine learning to apply my knowledge.
+After I graduate, I want to go to Graduate School to study machine learning or data science. After which, I aim to find a job in data science or machine learning to apply my knowledge.
 
 ## Skills
 
