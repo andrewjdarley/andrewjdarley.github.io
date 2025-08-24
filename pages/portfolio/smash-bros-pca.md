@@ -2,7 +2,7 @@
 
 <img src="/images/wolf_taunt.avif" alt="Wolf Taunt" />
 
-In my Junior year of high school, I was introduced to competitive Smash Ultimate. After getting out of the casual realm of Kirby down-B spam and Electroshock arm where basically all players start, I began to notice just how deep and nuanced the game really is. Each character has a unique toolkit, and the way players talk about "matchups" and "playstyles" is well thought out and hyper-analyzed. The game is just so complex and there are so many interactions among the nearly 8,000 character matchups that every game can feel unique. 
+In my Junior year of high school, I was introduced to competitive Super Smash Brothers Ultimate. After getting out of the casual realm of Kirby down-B spam and Electroshock arm where basically all players start, I began to notice just how deep and nuanced the game really is. Each character has a unique toolkit, and the way players talk about "matchups" and "playstyles" is well thought out and hyper-analyzed. The game is just so complex and there are so many interactions among the nearly 8,000 character matchups that every game can feel unique. 
 
 The first character I used as my main was Wolf. Back then he was known as an easy-to-play S-tier character who also served as a good introduction character to high-level-play. To this day, Wolf is one of my favorite characters to play and I still have great success with him at tournaments. However, the playstyle I learned with Wolf was very weak to one of the most popular characters played by my high school peers, Bowser. 
 

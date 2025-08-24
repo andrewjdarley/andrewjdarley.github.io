@@ -1,5 +1,9 @@
 # About Me
 
+## Married to Betty Darley, April 29th, 2025!
+
+<img src="/images/loveyoubetty.jpeg" alt="Wedding Pic" width="200" />
+
 ## Education
 Bachelors in BYU's ACME (Applied Computational and Mathematical Emphasis) program with an emphasis in Data Science. Expected Graduation: April 2027
 
