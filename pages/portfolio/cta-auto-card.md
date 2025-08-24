@@ -66,7 +66,7 @@ Finally, I want to speak to you, the person reading this article who has no desi
 
 I genuinely think that is the natural next step for something like this. While this could never work for Magic the Gathering, it could definitely work for other things like Pokemon cards or something as random as Fire Emblem character fabrication. But applications are ultimately limited as the model can only work to find the "average" between the k-nearest neighbors. What is the mean between a draw-four card and an uno reverse? It doesn't make sense to even ask that question. So creativity is certainly necessary in the application of this project. 
 
-Anyway, I am excited to try contrastive learning on this problem. The next time I write about Call to Adventure I can skip a ton of fluff now that I wrote this all down. Overall this has been a great learning experience. And I love working on projects related to my passions. Now I jsut have to find a way to tie Attack on Titan into Data Science...
+Anyway, I am excited to try contrastive learning on this problem. The next time I write about Call to Adventure I can skip a ton of fluff now that I wrote this all down. Overall this has been a great learning experience. And I love working on projects related to my passions. Now I just have to find a way to tie Attack on Titan into Data Science...
 
 ### Demo Data
 
