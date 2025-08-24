@@ -34,7 +34,7 @@ Python, C++, HTML, CSS, MongoDB, Webscraping, Backend Development, Linux, AWS
 Pytorch, Tensorflow, Keras, Computer Vision, Transformer-based Architectures, Basic Machine Learning in Scikit-Learn
 
 ### Other Skills
-Spanish Fluency, Team Efficiency Management, Creative Problem Solving, Big Picture Thinking, On-the-fly learning, Data storytelling
+Spanish Fluency, Team Efficiency Management, Creative Problem Solving, Big Picture Thinking, On-the-fly learning, Data storytelling, Constructive AI use
 
 ## Current Projects
 My lab conducted a Kaggle competition that just finished: [BYU Locating Bacterial Flagellar Motors 2025](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025). Right now we are working on applying the knowledge and models derived from the participants' solutions in the competition. From this we are developing a curated dataset of flagellar motors.
