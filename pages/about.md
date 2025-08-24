@@ -1,7 +1,7 @@
 # About Me
 
 ## Education
-Bachelors in BYU's ACME (Applied Computational and Mathematical Emphasis) program wich an emphasis in Data Science. Expected Graduation: April 2027
+Bachelors in BYU's ACME (Applied Computational and Mathematical Emphasis) program with an emphasis in Data Science. Expected Graduation: April 2027
 
 ## Work Experience
 
@@ -15,11 +15,11 @@ Bachelors in BYU's ACME (Applied Computational and Mathematical Emphasis) progra
 ### Past
 **Software Developer** for <a href="https://www.uicharitable.org/" style="color: #b3e5fc;">UI Charitable Advisors</a>. I developed company software to facilitate business development, CRM integration, and internal account management.
 
-**Teaching Assistant** for <a href="https://cs111.byu.edu/" style="color: #b3e5fc;">BYU's CS111</a> entry-level programming course. I helped students with technical difficulties and homework, and taught a biweekly lab section.
+**Teaching Assistant** for <a href="https://cs111.byu.edu/" style="color: #b3e5fc;">BYU's CS111</a> entry-level programming course. I helped students with technical difficulties and homework, and taught a lab secion twice a week.
 
 
 ## Professional Goals
-After I graduate, I want to go to Grad School to study machinie learning or data science in either a specific interest or generally. After which, I aim to find a job in data science or machine learning to apply my knowledge.
+After I graduate, I want to go to Graduate School to study machine learning or data science in either a specific interest or generally. After which, I aim to find a job in data science or machine learning to apply my knowledge.
 
 ## Skills
 
