@@ -1,6 +1,6 @@
 # About Me
 
-## Married to Betty Darley, April 29th, 2025!
+## Married to Betty Darley April 29th, 2025!
 
 <img src="/images/loveyoubetty.jpeg" alt="Wedding Pic" width="200" />
 
